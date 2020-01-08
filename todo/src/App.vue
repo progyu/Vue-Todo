@@ -16,10 +16,9 @@ export default {
 </script>
 
 <style>
-  #app {
-    @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,700|Noto+Sans+KR');
-    @import url('https://use.fontawesome.com/releases/v5.5.0/css/all.css');
-  }
+  @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,700|Noto+Sans+KR');
+  @import url('https://use.fontawesome.com/releases/v5.5.0/css/all.css');
+
   * {
     box-sizing: border-box;
     margin: 0;

@@ -3,29 +3,73 @@
       <h1 class="title">Todos</h1>
       <div class="ver">2.0</div>
 
-      <input class="input-todo" placeholder="What needs to be done?" autofocus>
-      <ul class="nav">
-        <li id="all" class="active">All</li>
-        <li id="active">Active</li>
-        <li id="completed">Completed</li>
+      <input class="input-todo" placeholder="What needs to be done?" v-model="value" @keyup.enter="onSubmit" autofocus>
+      <ul class="nav" @click="onClickNav">
+        <li id="all" :class="navState === 'all' ? 'active' : ''">All</li>
+        <li id="active" :class="navState === 'active' ? 'active' : ''">Active</li>
+        <li id="completed" :class="navState === 'completed' ? 'active' : ''">Completed</li>
       </ul>
 
-      <ul class="todos"></ul>
+      <ul class="todos">
+        <li v-for="todo in todos" :key="todo.id" class="todo-item">
+          <input class="custom-checkbox" type="checkbox" :id="`ck-`+todo.id" v-model="todo.completed" />
+          <label :for="`ck-`+todo.id">{{ todo.value }}</label>
+          <i class="remove-todo far fa-times-circle" @click="onRemove(todo.id)"/>
+        </li>
+      </ul>
       <div class="footer">
         <div class="complete-all">
-          <input class="custom-checkbox" type="checkbox" id="ck-complete-all">
+          <input class="custom-checkbox" type="checkbox" id="ck-complete-all" v-model="allCheckState" @click="onChangeAll">
           <label for="ck-complete-all">Mark all as complete</label>
         </div>
         <div class="clear-completed">
-          <button class="btn">Clear completed (<span class="completed-todos">0</span>)</button>
-          <strong class="active-todos">0</strong> items left
+          <button class="btn" @click="onClearCompleted">Clear completed (<span class="completed-todos">{{ getCompleted() }}</span>)</button>
+          <strong class="active-todos">{{ getLefted() }}</strong> items left
         </div>
       </div>
     </div>
 </template>
 
 <script>
+  let id = 1;
 export default {
+  data () {
+    return {
+      todos : [],
+      value: '',
+      navState: 'all',
+      allCheckState: false,
+    }
+  },
+  methods: {
+    onSubmit () {
+      if(!(this.value)) return;
+      this.todos.push({
+        id: id++,
+        value: this.value,
+        completed: false,
+      });
+      this.value = '';
+    },
+    onRemove (delId) {
+      this.todos = this.todos.filter(todo => todo.id !== delId);
+    },
+    onClickNav (e) {
+      this.navState = e.target.id;
+    },
+    onChangeAll () {
+      this.todos = this.todos.map(todo => ({...todo, completed: !this.allCheckState}));
+    },
+    onClearCompleted () {
+      this.todos = this.todos.filter(todo => todo.completed === false);
+    },
+    getCompleted () {
+      return this.todos.filter(todo => todo.completed === true).length;
+    },
+    getLefted () {
+      return this.todos.filter(todo => todo.completed === false).length;
+    }
+  }
 }
 </script>
 
