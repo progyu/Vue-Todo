@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <Todo />
+    <router-link :to="{path: '/home'}">home</router-link> |
+    <span @click="$router.push({ name: 'about'})">about</span> |
+    <router-link to="/">todo</router-link>
+    <router-view></router-view>
   </div>
 </template>
 
